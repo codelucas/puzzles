@@ -2,8 +2,8 @@ Puzzles
 =======
 Gotta stay sharp!
 
-Common algorithms in computer science &amp; interview questions. Implemented in Java, Python, and C.
-You may notice that some files are either incomplete or totally blank, consider them marked as "TODO"!
+A library of CS algorithms and interview questions. Implemented in Java, Python, and C.
+You may notice that some files are either incomplete or totally blank, consider them marked for todo!
 
 I'll push solutions as they come!
 
