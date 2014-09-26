@@ -68,19 +68,16 @@ void execute_test(int *numbers, int n, int test_num)
     _mergesort(numbers, 0, n-1, n);
     printf("test #%d after sort:\t", test_num);
     print_int_arr(numbers, n);
+    printf("VERDICT: %s\n", 
+        is_sorted(numbers, n) ? "It's sorted" : "It's not sorted!");
 }
 
 int main(int argc, char *argv[])
 {
-    int test1[] = {10, -4, 7, 100, 10000, -512, 512};
-    int test2[] = {10};
-    int test3[] = {100, 2, 100};
-    int test4[] = {100, -100};
-
-    execute_test(test1, sizeof(test1) / sizeof(int), 1);
-    execute_test(test2, sizeof(test2) / sizeof(int), 2);
-    execute_test(test3, sizeof(test3) / sizeof(int), 3);
-    execute_test(test4, sizeof(test4) / sizeof(int), 4);
+    execute_test(random_int_arr(7), 7, 1);
+    execute_test(random_int_arr(1), 1, 2);
+    execute_test(random_int_arr(3), 3, 3);
+    execute_test(random_int_arr(2), 2, 4);
 
     return 0;
 }
