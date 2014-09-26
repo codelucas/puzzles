@@ -1,5 +1,5 @@
-#include <stdio.h>
 #include <stdlib.h>
+#include "dbg.h"
 #include "common.h"
 
 /*
@@ -64,14 +64,10 @@ void _mergesort(int *numbers, int lo, int hi, int n)
 // signatures.
 void execute_test(int *numbers, int n, int test_num)
 {
-    printf("test #%d prior to sort:\t", test_num);
-    print_int_arr(numbers, n);
-    _mergesort(numbers, 0, n-1, n);
-    printf("test #%d after sort:\t", test_num);
-    print_int_arr(numbers, n);
-    printf("VERDICT: %s\n", 
-        is_sorted(numbers, n) ? "It's sorted" : "It's not sorted!");
+    _mergesort(numbers, 0, n - 1, n);
+    check(is_sorted(numbers, n), "Mergesort failed!");
     free(numbers);
+error:;
 }
 
 int main(int argc, char *argv[])

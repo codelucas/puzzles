@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "dbg.h"
 
 #define NOT_FOUND -1
@@ -23,7 +22,7 @@ int binary_search(int *numbers, int lo, int hi, int e)
 void execute_test(int *numbers, int n)
 {
     int rc = binary_search(numbers, 0, n - 1, numbers[0]);
-    check(rc == 0, "Binary search has failed! Recieved %d instead of 0", rc);
+    check(rc == 0, "Binary search failed! Recieved %d instead of 0", rc);
 error:;
 }
 
@@ -44,6 +43,5 @@ int main(int argc, char *argv[])
     check(rc == -1, "Binary search failed! Recieved %d instead of -1", rc);
 error:
     return -1;
-
     return 0;
 }
