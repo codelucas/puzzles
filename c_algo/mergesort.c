@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "common.h"
 
 /*
@@ -70,6 +71,7 @@ void execute_test(int *numbers, int n, int test_num)
     print_int_arr(numbers, n);
     printf("VERDICT: %s\n", 
         is_sorted(numbers, n) ? "It's sorted" : "It's not sorted!");
+    free(numbers);
 }
 
 int main(int argc, char *argv[])
