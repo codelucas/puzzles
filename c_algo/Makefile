@@ -4,11 +4,13 @@ all:
 	make quicksort
 	make mergesort
 	make binary_search
+	make linkedlist
 
 clean:
 	rm -f quicksort
 	rm -f mergesort
 	rm -f binary_search
+	rm -f linkedlist
 	rm -f *.o
 	rm -rf *.dSYM
 
