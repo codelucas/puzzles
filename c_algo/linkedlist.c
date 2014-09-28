@@ -15,7 +15,7 @@ typedef struct Node {
 // returns a random number between -100 and 100
 int r()
 {
-    return (rand() % 200) - 100;
+    return (rand() % 201) - 100;
 }
 
 // returns a node with a random value
@@ -102,7 +102,7 @@ Node *reverse_list(Node *head, Node *reversed)
     if (!head) {
         return reversed;
     }
-    // don't lost the head pointer!
+    // don't lose the head pointer!
     Node *first = head;
     head = head->next;
     first->next = reversed;
