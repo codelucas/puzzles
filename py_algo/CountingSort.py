@@ -34,23 +34,24 @@ def inPlaceCounting(arr):
     # Find the max key range
     maxKey = 0
     for e in arr:
-        if e > maxKey: maxKey = e
-    N = [0 for x in range(maxKey + 1)]
+        if e > maxKey:
+            maxKey = e
 
+    N = [0 for x in xrange(maxKey + 1)]
     for e in arr:
         N[e] += 1
+
     index = 0
-    for i in range(maxKey + 1):
-        for j in range(N[i]):
+    for i in xrange(maxKey + 1):
+        for j in xrange(N[i]):
             arr[index] = i
             index += 1
-    return arr
 
 def main():
-    lst = [3, 2, 10, 2, 4, 5, 1, 13, 8, 2 ,3]
-    sortedList = inPlaceCounting(lst)
+    lst = [3, 2, 10, 2, 4, 5, 1, 13, 8, 2, 3]
     print "Original:", lst
-    print "Sorted  :", sortedList
+    inPlaceCounting(lst)
+    print "Sorted:", lst
 
 if __name__ == "__main__":
     main()
