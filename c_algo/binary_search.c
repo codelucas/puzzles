@@ -23,6 +23,7 @@ void execute_test(int *numbers, int n)
 {
     int rc = binary_search(numbers, 0, n - 1, numbers[0]);
     check(rc == 0, "Binary search failed! Recieved %d instead of 0", rc);
+    return;
 error:;
 }
 
@@ -41,7 +42,7 @@ int main(int argc, char *argv[])
     int test4_len = sizeof(test4) / sizeof(int);
     int rc = binary_search(test4, 0, test4_len - 1, 777);
     check(rc == -1, "Binary search failed! Recieved %d instead of -1", rc);
+    return 0;
 error:
     return -1;
-    return 0;
 }

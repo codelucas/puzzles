@@ -89,13 +89,8 @@ int main(int argc, char *argv[])
     // Only works on arrays with only positive integers
     int *arr = random_int_arr(arr_size);
     make_positive(arr, arr_size);
-    printf("Array before radix sort: ");
-    print_int_arr(arr, arr_size);
 
     radix_sort(arr, arr_size);
-
-    printf("Array after radix sort: ");
-    print_int_arr(arr, arr_size);
 
     check(is_sorted(arr, arr_size), "Radix sort failed!");
     free(arr);

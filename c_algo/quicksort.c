@@ -61,6 +61,7 @@ void execute_test(int *numbers, int n, int test_num)
     quicksort(numbers, 0, n - 1);
     check(is_sorted(numbers, n), "Quicksort failed!");
     free(numbers);
+    return;
 error:;
 }
 

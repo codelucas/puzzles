@@ -67,6 +67,7 @@ void execute_test(int *numbers, int n, int test_num)
     _mergesort(numbers, 0, n - 1, n);
     check(is_sorted(numbers, n), "Mergesort failed!");
     free(numbers);
+    return;
 error:;
 }
 
