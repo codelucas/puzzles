@@ -5,7 +5,7 @@ import java.util.HashSet;
 
 /*
  * Given a String, generate and print all 
- * of it's permutations 
+ * of its permutations 
  */
 
 public class Permutations {

@@ -11,7 +11,7 @@ public class ParenthesisCombos {
      * is O(2^n)
      * 
      * Can further optimize by using a char[] array instead of attempting to
-     * O(n^2) concatenating str's.
+     * O(n^2) concatenating strings.
      * 
      */
 

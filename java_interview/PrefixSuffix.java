@@ -3,8 +3,8 @@ package JavaInterview;
 
 public class PrefixSuffix {
     /*
-     * Given two String, s1 and s2. to find the longest 
-     * substring which is prefix of s1, as well as 
+     * Given two Strings: s1 and s2, find the longest 
+     * substring which is a prefix of s1 as well as a
      * suffix of s2.
      */
     
