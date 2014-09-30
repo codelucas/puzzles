@@ -6,6 +6,7 @@ all:
 	make binary_search
 	make linkedlist
 	make radix
+	make trees
 
 clean:
 	rm -f quicksort
@@ -13,6 +14,7 @@ clean:
 	rm -f binary_search
 	rm -f linkedlist
 	rm -f radix
+	rm -f trees
 	rm -f *.o
 	rm -rf *.dSYM
 
