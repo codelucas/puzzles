@@ -7,9 +7,6 @@
  * (construction, traversal, etc)
  */
 
-// TODO: Some memory is still leaking after running with
-// valgrind ... ugh, will fix ASAP!
-
 typedef struct TreeNode {
     int val;
     struct TreeNode *left;
@@ -38,44 +35,59 @@ void queue_push(Queue *queue, TreeNode *value)
 {
     QueueNode *node = malloc(sizeof(QueueNode));
     node->val = value;
+    node->next = NULL;
+    node->prev = NULL;
 
-    if (queue->head) {
-        QueueNode *old_head = queue->head;
-        queue->head = node;
-        old_head->prev = queue->head;
-        queue->head->next = old_head;
+    if (queue->tail) {
+        queue->head->prev = node;
     } else {
-        queue->head = node;
-    }
-    if (!queue->tail) {
         queue->tail = node;
     }
+    queue->head = node;
     queue->size++; 
 }
 
 // removes and returns the oldest node in the queue
 TreeNode *queue_pop(Queue *queue)
 {
-    assert(queue);
     QueueNode *popped = queue->tail;
-    queue->tail = queue->tail->prev;
+    TreeNode *tn = popped->val;
+
+    queue->tail = popped->prev;
     queue->size--;
-    return popped->val;
+
+    free(popped);
+    return tn;
+}
+
+void print_queue(Queue *queue)
+{
+    if (!queue->tail) {
+        printf("Queue is empty!\n");
+        return;
+    }
+    int count = 0;
+    while (queue->tail) {
+        printf("Queue elem %d: %d\n",
+               count++, queue->tail->val->val);
+        queue->tail = queue->tail->prev;
+    }
 }
 
 void free_queue(Queue *queue)
 {
-    if (!queue) {
-        return;
+    QueueNode *cur = queue->tail;
+    while (cur) {
+        // intentionaly don't free values because the
+        // tree is being used apart from the queue
+        QueueNode *tmp = cur;
+        cur = cur->prev;
+        free(tmp);
     }
 
-    QueueNode *cur = queue->head;
-    while (cur) {
-        // intentionaly don't free values because the tree
-        // is being used apart from the queue
-        free(cur);
-        cur = cur->next;
-    }
+    queue->head = NULL;
+    queue->tail = NULL;
+    free(queue);
 }
 
 // creates a new treenode with the value set to the input
@@ -113,22 +125,23 @@ TreeNode *build_tree()
     int tree_elements[] = {5, 4, 6, 3, 7, 5};
     TreeNode *root = make_node(tree_elements[0]);
 
-    int n = sizeof(tree_elements) / sizeof(int);
     int i;
+    int n = sizeof(tree_elements) / sizeof(int);
+    TreeNode *node;
     for (i = 1; i < n; i++) {
-        int e = tree_elements[i];
-        TreeNode *node = make_node(e);
+        node = make_node(tree_elements[i]);
         tree_insert(root, node);
     }
+    node = NULL;
     return root; 
 }
 
 void free_tree(TreeNode *root)
 {
     if (root) {
-        free(root);
         free_tree(root->left);
         free_tree(root->right);
+        free(root);
     }
 }
 
@@ -162,6 +175,7 @@ void bfs(TreeNode *root)
             queue_push(queue, cur->right);
         }
     }
+    free_queue(queue);
 }
 
 // print out all paths of node values in a tree via DFS
@@ -193,11 +207,13 @@ void level_order(TreeNode *root)
     if (!root) {
         return;
     }
+
     Queue *queue = malloc(sizeof(Queue));         
     queue_push(queue, root);
 
     int next_counter = 0;
     int cur_counter = 1;
+
     while (queue->size > 0) {
         TreeNode *cur = queue_pop(queue);
         printf("%d ", cur->val);
@@ -219,7 +235,7 @@ void level_order(TreeNode *root)
             next_counter = 0;
         }
     }
-    // TODO: free_queue(queue);
+    free_queue(queue);
 }
 
 int main(int argc, char *argv[])
@@ -236,14 +252,13 @@ int main(int argc, char *argv[])
     printf("\nPrinting out all paths of the tree:\n");
     int path[6];
     all_paths(tree, path, 0);
-    printf("Correct answer:\n"
-           "5 4 3\n5 4 5\n5 6 7\n");
+    printf("Correct answer:\n5 4 3\n5 4 5\n5 6 7\n");
 
     printf("\nPrinting out the tree in level order:\n");
     level_order(tree);
-    printf("Correct answer:\n"
-           "5\n4 6\n3 5 7\n");
+    printf("Correct answer:\n5\n4 6\n3 5 7\n");
 
-    // TODO: free_tree(tree);
+    free_tree(tree);
+
     return 0;
 }
