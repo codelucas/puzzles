@@ -22,3 +22,4 @@ quicksort: common.o
 mergesort: common.o
 binary_search: common.o
 radix: common.o
+trees: queue.o

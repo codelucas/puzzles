@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <assert.h>
+#include "queue.h"
 
 /*
  * Tree related algorithms:
@@ -13,85 +13,27 @@ typedef struct TreeNode {
     struct TreeNode *right;
 } TreeNode;
 
-
-// We use a FIFO queue for BFS, tail gets popped first
-// and head is inserted into
-typedef struct Queue {
-    struct QueueNode *head;
-    struct QueueNode *tail;
-    int size;
-} Queue;
-
-
-typedef struct QueueNode {
-    struct TreeNode *val;
-    struct QueueNode *next;
-    struct QueueNode *prev;
-} QueueNode;
-
-
-// adds a new element to the back of the queue
-void queue_push(Queue *queue, TreeNode *value)
-{
-    QueueNode *node = malloc(sizeof(QueueNode));
-    node->val = value;
-    node->next = NULL;
-    node->prev = NULL;
-
-    if (queue->tail) {
-        queue->head->prev = node;
-    } else {
-        queue->tail = node;
-    }
-    queue->head = node;
-    queue->size++; 
-}
-
-// removes and returns the oldest node in the queue
-TreeNode *queue_pop(Queue *queue)
-{
-    QueueNode *popped = queue->tail;
-    TreeNode *tn = popped->val;
-
-    queue->tail = popped->prev;
-    queue->size--;
-
-    free(popped);
-    return tn;
-}
-
+// this can't go inside queue.c/h because it requires
+// TreeNode specific code
 void print_queue(Queue *queue)
 {
     if (!queue->tail) {
         printf("Queue is empty!\n");
         return;
     }
-    int count = 0;
-    while (queue->tail) {
-        printf("Queue elem %d: %d\n",
-               count++, queue->tail->val->val);
-        queue->tail = queue->tail->prev;
-    }
-}
 
-void free_queue(Queue *queue)
-{
+    int count = 0;
     QueueNode *cur = queue->tail;
     while (cur) {
-        // intentionaly don't free values because the
-        // tree is being used apart from the queue
-        QueueNode *tmp = cur;
+        TreeNode *tn = cur->val;
+        printf("Queue elem %d: %d\n", count++, tn->val);
         cur = cur->prev;
-        free(tmp);
     }
-
-    queue->head = NULL;
-    queue->tail = NULL;
-    free(queue);
+    cur = NULL;
 }
 
 // creates a new treenode with the value set to the input
-TreeNode *make_node(int val)
+TreeNode *make_tree_node(int val)
 {
     TreeNode *n = malloc(sizeof(TreeNode));
     n->val = val;
@@ -123,13 +65,13 @@ void tree_insert(TreeNode *root, TreeNode *node)
 TreeNode *build_tree()
 {
     int tree_elements[] = {5, 4, 6, 3, 7, 5};
-    TreeNode *root = make_node(tree_elements[0]);
+    TreeNode *root = make_tree_node(tree_elements[0]);
 
     int i;
     int n = sizeof(tree_elements) / sizeof(int);
     TreeNode *node;
     for (i = 1; i < n; i++) {
-        node = make_node(tree_elements[i]);
+        node = make_tree_node(tree_elements[i]);
         tree_insert(root, node);
     }
     node = NULL;
@@ -162,20 +104,20 @@ void bfs(TreeNode *root)
     if (!root) {
         return;
     }
-    Queue *queue = malloc(sizeof(Queue));         
-    queue_push(queue, root);
+    Queue *queue = create_queue();         
+    queue->push(queue, root);
 
     while (queue->size > 0) {
-        TreeNode *cur = queue_pop(queue);
+        TreeNode *cur = queue->pop(queue);
         printf("%d ", cur->val);
         if (cur->left) {
-            queue_push(queue, cur->left);
+            queue->push(queue, cur->left);
         }
         if (cur->right) {
-            queue_push(queue, cur->right);
+            queue->push(queue, cur->right);
         }
     }
-    free_queue(queue);
+    queue->free(queue);
 }
 
 // print out all paths of node values in a tree via DFS
@@ -208,23 +150,23 @@ void level_order(TreeNode *root)
         return;
     }
 
-    Queue *queue = malloc(sizeof(Queue));         
-    queue_push(queue, root);
+    Queue *queue = create_queue();
+    queue->push(queue, root);
 
     int next_counter = 0;
     int cur_counter = 1;
 
     while (queue->size > 0) {
-        TreeNode *cur = queue_pop(queue);
+        TreeNode *cur = queue->pop(queue);
         printf("%d ", cur->val);
         cur_counter--;
 
         if (cur->left) {
-            queue_push(queue, cur->left);
+            queue->push(queue, cur->left);
             next_counter++;
         }
         if (cur->right) {
-            queue_push(queue, cur->right);
+            queue->push(queue, cur->right);
             next_counter++;
         }
         if (cur_counter == 0) {
@@ -235,7 +177,7 @@ void level_order(TreeNode *root)
             next_counter = 0;
         }
     }
-    free_queue(queue);
+    queue->free(queue);
 }
 
 int main(int argc, char *argv[])
