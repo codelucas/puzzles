@@ -1,8 +1,7 @@
 #ifndef _queue_h
 #define _queue_h
 
-// We use a FIFO queue for BFS, tail gets popped first
-// and head is inserted into
+// Tail gets popped and head is inserted into
 
 typedef struct QueueNode {
     void *val;
