@@ -23,49 +23,31 @@
 // usage of null termination char as bounds
 int regex_parse(char *regex, char *string)
 {
-    int pos = 0;
-    char regex_char = *(regex + pos);
-    char string_char = *(string + pos);
-
-    while (regex_char != '\0') {
-        if (DEBUG) {
-            printf("current state: regex char: %c, string char %c\n",
-                    regex_char, string_char);
-        }
-        if (regex_char == DOT) {
-            // if input other string has already hit the end
-            if (string_char == '\0') {
-                return 0;
-            }
-            // else, continue
-        }
-        else if (isalpha(regex_char)) {
-            // if the char at matching pos of input str is not equal
-            // the regex match failed, accounts for when string is at end
-            if (string_char != regex_char) {
-                return 0;
-            }
-            // else, continue
-        }
-        else if (regex_char == STAR) {
-            int try1 = regex_parse(regex + pos + 1, string + pos);
-            int try2 = 0;
-            if (!try1 && string_char != '\0') {
-                try2 = regex_parse(regex + pos, string + pos + 1);
-            }
-            return try1 || try2;
-        }
-        else {
-            printf("Unrecognized character %c!\n", string_char);
-            return 0;
-        }
-        // advance forwards
-        pos++;
-        regex_char = *(regex + pos);
-        string_char = *(string + pos);
+    if (DEBUG) {
+        printf("current state: regex char: %c, string char %c\n",
+                *regex, *string);
     }
 
-    return 1;
+    // base case, an empty regex must pair with an empty string
+    if (*regex == '\0') {
+        return (*string == '\0');    
+    }
+
+    if (*regex != STAR) {
+        return ((*regex == *string) ||
+                (*regex == DOT && *string != '\0')) &&
+               regex_parse(regex + 1, string + 1);
+    }
+    else {
+        // star matches nothing
+        int try1 = regex_parse(regex + 1, string); 
+        // star sucks one character from the string
+        int try2 = 0;
+        if (!try1 && *string != '\0') {
+            try2 = regex_parse(regex, string + 1);
+        }
+        return try1 || try2;
+    }
 }
 
 void test_regex(char *regex, char *string, int verdict)
