@@ -10,7 +10,7 @@
 /*
  * Write your own regular expression parser for following condition:
  * az*b can match any string that starts with az and ends with b and 0
- * or more characters of any value between. e.g. ab, asdfnsjdk3b etc.
+ * or more characters of any value between. e.g. azb, azsdfnsjdk3b etc.
  * 
  * a.b can match a string starting with a, ending with b with one character
  * of anything inbetween. e.g. a1b, abb, acb
